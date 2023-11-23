@@ -362,8 +362,8 @@ class GenericConvOperator(TransformableOperator):
             kernel_num = self.inputs[1].shape[-1]
 
         if len(conv_op.inputs) == 2 or conv_op.inputs[2] is None:
-            if conv_op.inputs[0].dtype == np.dtype('float32'):
-                bias = np.zeros((kernel_num,), dtype='float32')
+            if conv_op.inputs[0].dtype in (np.dtype('float32'), np.dtype('float16')):
+                bias = np.zeros((kernel_num,), dtype=conv_op.inputs[0].dtype)
                 q_args = None
             else:
                 bias = np.zeros((kernel_num,), dtype='int32')

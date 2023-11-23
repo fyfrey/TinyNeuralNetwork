@@ -957,7 +957,7 @@ class ATenAvgPool2dOperator(ATenAvgPool2dSchema):
             )
             mask_permuted = mask.permute(0, 2, 3, 1)
             mask_t = self.create_attr_tensor(mask_permuted)
-            before_mask = outputs[0].tensor / mask_permuted
+            before_mask = outputs[0].tensor / mask_permuted.cpu()
             before_mask_t = self.create_transform_tensor(before_mask)
             actual_out = ops[-2].outputs[0]
             ops[-2].outputs[0] = before_mask_t
@@ -1876,7 +1876,7 @@ class ATenAddOperator(ATenAddSchema):
 
         if type(other) in (int, float, bool):
             self.input_tensors[1] = torch.tensor([other], dtype=self.input_tensors[0].dtype)
-        elif type(other) != torch.Tensor:
+        elif not isinstance(other, torch.Tensor):
             assert False, "other should have type int, float, tensor in aten::add(input, other)"
 
         self.elementwise_binary(tfl.AddOperator, graph_converter, True)

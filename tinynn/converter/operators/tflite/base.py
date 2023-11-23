@@ -243,7 +243,7 @@ class Tensor(object):
 
                         self.quantization = QuantizationParameters(scales, zero_points, dim)
             else:
-                self.tensor = tensor.detach().numpy()
+                self.tensor = tensor.cpu().detach().numpy()
         elif type(tensor) == torch.Size:
             self.tensor = np.asarray(tensor, dtype='int32')
         elif type(tensor) in (tuple, list):
